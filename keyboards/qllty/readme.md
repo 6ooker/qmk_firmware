@@ -1,8 +1,8 @@
-# qllty
+# QLLTY
+
+Handwired personal project. Tranquillity.  
 
 ![qllty](imgur.com image replace me!)
-
-*A short description of the keyboard/project*
 
 * Keyboard Maintainer: [Rik](https://github.com/6ooker)
 * Hardware Supported: *The PCBs, controllers supported*
