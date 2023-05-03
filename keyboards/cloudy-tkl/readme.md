@@ -1,8 +1,8 @@
-# QLLTY
+# CLOUDY
 
 Handwired personal project. Tranquillity.  
 
-![qllty](imgur.com image replace me!)
+![cloudy](imgur.com image replace me!)
 
 * Keyboard Maintainer: [Rik](https://github.com/6ooker)
 * Hardware Supported: *The PCBs, controllers supported*
@@ -10,11 +10,11 @@ Handwired personal project. Tranquillity.
 
 Make example for this keyboard (after setting up your build environment):
 
-    make qllty:default
+    make cloudy:default
 
 Flashing example for this keyboard:
 
-    make qllty:default:flash
+    make cloudy:default:flash
 
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
 
