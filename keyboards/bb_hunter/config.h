@@ -3,10 +3,10 @@
 
 #pragma once
 
-#define MATRIX_ROW_PINS { GP5, GP6, GP4 }
-#define MATRIX_COL_PINS { GP27, GP26, GP24, GP25, GP20 }
+//#define MATRIX_ROW_PINS { GP5, GP6, GP4 }
+//#define MATRIX_COL_PINS { GP27, GP26, GP24, GP25, GP20 }
 
-#define DIODE_DIRECTION COL2ROW
+//#define DIODE_DIRECTION COL2ROW
 
 
 /*
