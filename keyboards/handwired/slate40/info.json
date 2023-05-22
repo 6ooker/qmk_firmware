@@ -24,7 +24,7 @@
         "vid": "0xFEED"
     },
     "layouts": {
-        "LAYOUT_default": {
+        "LAYOUT": {
             "layout": [
                 {"label":"Tab", "x":0, "y":0, "w":1.5},
                 {"label":"Q", "x":1.5, "y":0},
