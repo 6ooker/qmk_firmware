@@ -3,6 +3,11 @@
 
 #pragma once
 
+#define MATRIX_ROW_PINS {  }
+#define MATRIX_COL_PINS {  }
+
+#define DIODE_DIRECTION COL2ROW
+
 /*
  * Feature disable options
  *  These options are also useful to firmware size reduction.
