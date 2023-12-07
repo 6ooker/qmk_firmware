@@ -1,0 +1,34 @@
+{
+    "manufacturer": "Erik Katzenberger",
+    "keyboard_name": "handwired/padddle",
+    "maintainer": "6ooker",
+    "diode_direction": "COL2ROW",
+    "features": {
+        "bootmagic": true,
+        "command": false,
+        "console": false,
+        "extrakey": true,
+        "mousekey": false,
+        "nkro": false,
+        "backlight": false,
+        "rgblight": false,
+        "audio": false
+    },
+    "matrix_pins": {
+        "cols": ["C2"],
+        "rows": ["D1"]
+    },
+    "url": "",
+    "usb": {
+        "device_version": "0.0.1",
+        "pid": "0x0000",
+        "vid": "0xFEED"
+    },
+    "layouts": {
+        "LAYOUT_ortho_1x1": {
+            "layout": [
+                {"matrix": [0, 0], "x": 0, "y": 0}
+            ]
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "keyboard_name": "Padddle RP2040",
+    "processor": "RP2040",
+    "bootloader": "rp2040",
+    "matrix_pins": {
+        "cols": ["GP3"],
+        "rows": ["GP4"]
+    },
+    "backlight": {
+        "pin": "GP25"
+    },
+    "ws2812": {
+        "pin": "GP25"
+    }
+}
