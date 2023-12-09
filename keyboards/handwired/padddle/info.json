@@ -1,6 +1,6 @@
 {
     "manufacturer": "Erik Katzenberger",
-    "keyboard_name": "handwired/padddle",
+    "keyboard_name": "Padddle \u03A8",
     "maintainer": "6ooker",
     "diode_direction": "COL2ROW",
     "features": {
@@ -16,7 +16,7 @@
     },
     "url": "",
     "usb": {
-        "device_version": "0.0.1",
+        "device_version": "0.0.3",
         "pid": "0x6942",
         "vid": "0xFEED"
     },
