@@ -79,7 +79,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     if (code_is_held) {
                         clear_mods();
                         SEND_STRING("|");
-                        set_mods(mod_state);
                         return false;
                     }
                 }
@@ -92,7 +91,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     if (code_is_held) {
                         clear_mods();
                         SEND_STRING("\\");
-                        set_mods(mod_state);
                         return false;
                     }
                 }
@@ -105,7 +103,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     if (code_is_held) {
                         clear_mods();
                         SEND_STRING("#");
-                        set_mods(mod_state);
                         return false;
                     }
                 }
@@ -118,7 +115,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     if (code_is_held) {
                         clear_mods();
                         SEND_STRING("&");
-                        set_mods(mod_state);
                         return false;
                     }
                 }
@@ -131,7 +127,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     if (code_is_held) {
                         clear_mods();
                         SEND_STRING("@");
-                        set_mods(mod_state);
                         return false;
                     }
                 }
@@ -144,7 +139,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     if (code_is_held) {
                         clear_mods();
                         SEND_STRING("{");
-                        set_mods(mod_state);
                         return false;
                     }
                 }
@@ -157,7 +151,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     if (code_is_held) {
                         clear_mods();
                         SEND_STRING("}");
-                        set_mods(mod_state);
                         return false;
                     }
                 }
@@ -170,7 +163,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     if (code_is_held) {
                         clear_mods();
                         SEND_STRING("[");
-                        set_mods(mod_state);
                         return false;
                     }
                 }
@@ -183,7 +175,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     if (code_is_held) {
                         clear_mods();
                         SEND_STRING("]");
-                        set_mods(mod_state);
                         return false;
                     }
                 }
@@ -225,6 +216,7 @@ const key_override_t type_dlr_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_DLR,
 const key_override_t type_ss_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_SS, DE_EXLM, 1<<TYPING);
 const key_override_t type_dlr_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_DLR, DE_UDIA, 1<<TYPING);
 const key_override_t type_ss_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_SS, DE_SECT, 1<<TYPING);
+const key_override_t type_scln_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_SCLN, DE_DEG, 1<<TYPING);
 
 // This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
@@ -257,6 +249,7 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     &type_ss_ovrd,
     &type_dlr_alt_ovrd,
     &type_ss_alt_ovrd,
+    &type_scln_ovrd,
     NULL // Null terminate the array!
 };
 
@@ -276,7 +269,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LCTL, KC_LWIN,  KC_LALT,                             KC_SPC,                             KC_RALT,  MO(FN),   CODE,     KC_LEFT, KC_DOWN, KC_RGHT),
 
     [TYPING] = LAYOUT_ansi_67(
-        KC_GRV,  KC_1,     KC_2,     KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     KC_MINS,  KC_EQL,   KC_BSPC,          KC_MUTE,
+        DE_SCLN, KC_1,     KC_2,     KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     DE_PERC,  KC_EQL,   KC_BSPC,          KC_MUTE,
         KC_TAB,  KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    KC_Z,    KC_U,    KC_I,    KC_O,    KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS,          KC_DEL,
         KC_CAPS, KC_A,     KC_S,     KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    DE_DLR,   DE_SS,              KC_ENT,           KC_HOME,
         KC_LSFT,           KC_Y,     KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    DE_COMM, DE_DOT,   DE_MINS,            KC_RSFT, KC_UP,
