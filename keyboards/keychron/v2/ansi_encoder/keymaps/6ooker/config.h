@@ -1,6 +1,9 @@
 #pragma once
 
 
+#undef RGB_MATRIX_DEFAULT_ON
+#define RGB_MATRIX_DEFAULT_ON false
+
 // RGB Matrix Animation modes. Explicitly enabled
 // For full list of effects, see:
 // https://docs.qmk.fm/#/feature_rgb_matrix?id=rgb-matrix-effects
