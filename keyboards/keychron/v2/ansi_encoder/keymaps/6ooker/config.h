@@ -7,6 +7,11 @@
 #undef TAPPING_TERM
 #define TAPPING_TERM 220
 
+#define LEADER_PER_KEY_TIMING
+#define LEADER_NO_TIMEOUT
+#undef LEADER_TIMEOUT
+#define LEADER_TIMEOUT 350
+
 // RGB Matrix Animation modes. Explicitly enabled
 // For full list of effects, see:
 // https://docs.qmk.fm/#/feature_rgb_matrix?id=rgb-matrix-effects

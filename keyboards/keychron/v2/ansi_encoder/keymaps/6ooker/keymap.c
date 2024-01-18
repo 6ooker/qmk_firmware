@@ -40,6 +40,7 @@ enum layers{
 enum {
     TD_LOS, // OS/UNLOCK
     TD_LCK, // OS/LOCK
+    TD_TC, // TAB/VSCODE COMMAND PALETTE
 };
 
 // Tap Dance definitions
@@ -48,7 +49,35 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_LOS] = ACTION_TAP_DANCE_DOUBLE(KC_LWIN, LCA(KC_DEL)),
     // Tap once for OS, twice for WIN+L
     [TD_LCK] = ACTION_TAP_DANCE_DOUBLE(KC_LWIN, LWIN(KC_L)),
+    // Tap once for TAB, twice for Ctrl+Shift+P (vs code command palette)
+    [TD_TC] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, RCS(KC_P)),
 };
+
+void leader_start_user(void) {
+    // Do smthing when the leader key is pressed
+}
+
+void leader_end_user(void) {
+    if (leader_sequence_two_keys(KC_U, KC_D)) {
+        // Leader, u, d
+        SEND_STRING("sudo apt update\n");
+    } else if (leader_sequence_two_keys(KC_U, KC_G)) {
+        // Leader, u, g
+        SEND_STRING("sudo apt upgrade -y\n");
+    } else if (leader_sequence_two_keys(KC_I, KC_I)) {
+        // Leader, i, i
+        SEND_STRING("if () {}" SS_TAP(X_LEFT) SS_TAP(X_ENT));
+    } else if (leader_sequence_two_keys(KC_I, KC_F)) {
+        // Leader, i, f
+        SEND_STRING("for () {}" SS_TAP(X_LEFT) SS_TAP(X_ENT));
+    } else if (leader_sequence_two_keys(KC_I, KC_W)) {
+        // Leader, i, w
+        SEND_STRING("while () {}" SS_TAP(X_LEFT) SS_TAP(X_ENT));
+    } else if (leader_sequence_one_key(KC_M)) {
+        // Leader, m
+        SEND_STRING("erik.katzenberger@exclusive-networks.de");
+    }
+}
 
 uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -362,7 +391,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [WIN_BASE] = LAYOUT_ansi_67(
         DE_GRV,  KC_1,     KC_2,     KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     DE_MINS,  DE_EQL,   KC_BSPC,          KC_MUTE,
         KC_TAB,  KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    DE_Z,    KC_U,    KC_I,    KC_O,    KC_P,     DE_LBRC,  DE_RBRC,  DE_BSLS,          KC_PGUP,
-        KC_CAPS, KC_A,     KC_S,     KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    DE_SCLN,  DE_QUOT,            KC_ENT,           KC_PGDN,
+        QK_LEAD, KC_A,     KC_S,     KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    DE_SCLN,  DE_QUOT,            KC_ENT,           KC_PGDN,
         KC_LSFT,           DE_Y,     KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    DE_COMM, DE_DOT,   DE_SLSH,            KC_RSFT, KC_UP,
         KC_LCTL, TD(TD_LOS),KC_LALT,                            KC_SPC,                             KC_RALT,  MO(FN),   CODE,     KC_LEFT, KC_DOWN, KC_RGHT),
 
