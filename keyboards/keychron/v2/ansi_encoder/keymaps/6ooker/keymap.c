@@ -400,7 +400,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,  KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    DE_Z,    KC_U,    KC_I,    KC_O,    KC_P,     DE_SLSH,  DE_LPRN,  DE_QUOT,          KC_DEL,
         KC_CAPS, KC_A,     KC_S,     KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    DE_DLR,   DE_SS,              KC_ENT,           KC_HOME,
         KC_LSFT,           DE_Y,     KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    DE_COMM, DE_DOT,   DE_MINS,            KC_RSFT, KC_UP,
-        KC_LCTL, KC_LWIN,  KC_LALT,                             KC_SPC,                             KC_RALT,  _______,  CODE,     KC_LEFT, KC_DOWN, KC_RGHT),
+        KC_LCTL, _______,  KC_LALT,                             KC_SPC,                             KC_RALT,  _______,  CODE,     KC_LEFT, KC_DOWN, KC_RGHT),
 
     [FN] = LAYOUT_ansi_67(
         KC_ESC,  KC_F1,    KC_F2,    KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,   KC_F11,   KC_F12,   RGB_SAD,          RGB_TOG,
@@ -420,20 +420,24 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 #endif // ENCODER_MAP_ENABLE
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+
     uint8_t layer = get_highest_layer(layer_state|default_layer_state);
+
     for (uint8_t i = led_min; i < led_max; i++) {
         switch(layer) {
             case 2:
-                rgb_matrix_set_color(i, RGB_BLUE);
+                rgb_matrix_set_color(i, 0, 14, 85);
+                //rgb_matrix_sethsv(200, 255, 200);
                 break;
             case 3:
+                if (get_highest_layer(layer_state) > 0) {
+                    for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+                        for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+                            uint8_t index = g_led_config.matrix_co[row][col];
 
-                for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-                    for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-                        uint8_t index = g_led_config.matrix_co[row][col];
-
-                        if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
-                            rgb_matrix_set_color(index, RGB_GREEN);
+                            if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
+                                rgb_matrix_set_color(index, RGB_GREEN);
+                            }
                         }
                     }
                 }
