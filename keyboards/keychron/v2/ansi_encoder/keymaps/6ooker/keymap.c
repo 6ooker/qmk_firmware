@@ -36,6 +36,16 @@ enum layers{
     FN
 };
 
+// Tap Dance declarations
+enum {
+    TD_LOS, // Lock/OS
+};
+
+// Tap Dance definitions
+tap_dance_action_t tap_dance_actions[] = {
+    // Tap once for OS, twice for Ctrl+Alt+Del
+    [TD_LOS] = ACTION_TAP_DANCE_DOUBLE(KC_LWIN, LCA(KC_DEL)),
+};
 
 uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -95,6 +105,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     if (code_is_held) {
                         clear_mods();
                         SEND_STRING("\\");
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+        case KC_E:
+            {
+                if (record->event.pressed) {
+                    if (code_is_held) {
+                        clear_mods();
+                        register_code(DE_EURO);
                         return false;
                     }
                 }
@@ -185,10 +207,45 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return true;
             }
 
+        case KC_U:
+            {
+                if (record->event.pressed) {
+                    if (code_is_held) {
+                        register_code(DE_UDIA);
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+        case KC_A:
+            {
+                if (record->event.pressed) {
+                    if (code_is_held) {
+                        register_code(DE_ADIA);
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+        case KC_O:
+            {
+                if (record->event.pressed) {
+                    if (code_is_held) {
+                        register_code(DE_ODIA);
+                        return false;
+                    }
+                }
+                return true;
+            }
+
         case CUST_UACC:
             {
                 if (record->event.pressed) {
-                    SEND_STRING("`u");
+                    register_code(DE_GRV);
+                    register_code(DE_U);
+                    return false;
                 }
                 return false;
             }
@@ -290,7 +347,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,  KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    KC_Z,    KC_U,    KC_I,    KC_O,    KC_P,     DE_LBRC,  DE_RBRC,  DE_BSLS,          KC_PGUP,
         KC_CAPS, KC_A,     KC_S,     KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    DE_SCLN,  DE_QUOT,            KC_ENT,           KC_PGDN,
         KC_LSFT,           KC_Y,     KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    DE_COMM, DE_DOT,   DE_SLSH,            KC_RSFT, KC_UP,
-        KC_LCTL, KC_LWIN,  KC_LALT,                             KC_SPC,                             KC_RALT,  MO(FN),   CODE,     KC_LEFT, KC_DOWN, KC_RGHT),
+        KC_LCTL, TD(TD_LOS),KC_LALT,                            KC_SPC,                             KC_RALT,  MO(FN),   CODE,     KC_LEFT, KC_DOWN, KC_RGHT),
 
     [TYPING] = LAYOUT_ansi_67(
         DE_SCLN, KC_1,     KC_2,     KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     DE_PERC,  KC_EQL,   KC_BSPC,          KC_MUTE,
