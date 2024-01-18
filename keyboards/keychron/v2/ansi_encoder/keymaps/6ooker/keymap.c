@@ -303,12 +303,12 @@ const key_override_t type_ss_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_SS, D
 const key_override_t type_dlr_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_DLR, DE_UDIA, 1<<TYPING);
 const key_override_t type_ss_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_SS, DE_SECT, 1<<TYPING);
 const key_override_t type_scln_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_SCLN, DE_DEG, 1<<TYPING);
-const key_override_t type_slsh_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_SLSH, CUST_DIV, 1<<TYPING);
-const key_override_t type_lprn_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_LPRN, CUST_MULT, 1<<TYPING);
-const key_override_t type_quot_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_QUOT, CUST_CURRENCY, 1<<TYPING);
-const key_override_t type_slsh_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_SLSH, CUST_UACC, 1<<TYPING);
-const key_override_t type_lprn_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_LPRN, DE_RPRN, 1<<TYPING);
-const key_override_t type_quot_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_QUOT, CUST_DIA, 1<<TYPING);
+const key_override_t type_slsh_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_SLSH, CUST_UACC, 1<<TYPING);
+const key_override_t type_lprn_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_LPRN, DE_RPRN, 1<<TYPING);
+const key_override_t type_quot_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_QUOT, CUST_DIA, 1<<TYPING);
+const key_override_t type_slsh_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_SLSH, CUST_DIV, 1<<TYPING);
+const key_override_t type_lprn_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_LPRN, CUST_MULT, 1<<TYPING);
+const key_override_t type_quot_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_QUOT, CUST_CURRENCY, 1<<TYPING);
 
 // This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
@@ -361,16 +361,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [WIN_BASE] = LAYOUT_ansi_67(
         DE_GRV,  KC_1,     KC_2,     KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     DE_MINS,  DE_EQL,   KC_BSPC,          KC_MUTE,
-        KC_TAB,  KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    KC_Z,    KC_U,    KC_I,    KC_O,    KC_P,     DE_LBRC,  DE_RBRC,  DE_BSLS,          KC_PGUP,
+        KC_TAB,  KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    DE_Z,    KC_U,    KC_I,    KC_O,    KC_P,     DE_LBRC,  DE_RBRC,  DE_BSLS,          KC_PGUP,
         KC_CAPS, KC_A,     KC_S,     KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    DE_SCLN,  DE_QUOT,            KC_ENT,           KC_PGDN,
-        KC_LSFT,           KC_Y,     KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    DE_COMM, DE_DOT,   DE_SLSH,            KC_RSFT, KC_UP,
+        KC_LSFT,           DE_Y,     KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    DE_COMM, DE_DOT,   DE_SLSH,            KC_RSFT, KC_UP,
         KC_LCTL, TD(TD_LOS),KC_LALT,                            KC_SPC,                             KC_RALT,  MO(FN),   CODE,     KC_LEFT, KC_DOWN, KC_RGHT),
 
     [TYPING] = LAYOUT_ansi_67(
-        DE_SCLN, KC_1,     KC_2,     KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     DE_PERC,  KC_EQL,   KC_BSPC,          KC_MUTE,
-        KC_TAB,  KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    KC_Z,    KC_U,    KC_I,    KC_O,    KC_P,     DE_SLSH,  DE_LPRN,  DE_QUOT,          KC_DEL,
+        DE_SCLN, KC_1,     KC_2,     KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     DE_PERC,  _______,  KC_BSPC,          KC_MUTE,
+        KC_TAB,  KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    DE_Z,    KC_U,    KC_I,    KC_O,    KC_P,     DE_SLSH,  DE_LPRN,  DE_QUOT,          KC_DEL,
         KC_CAPS, KC_A,     KC_S,     KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    DE_DLR,   DE_SS,              KC_ENT,           KC_HOME,
-        KC_LSFT,           KC_Y,     KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    DE_COMM, DE_DOT,   DE_MINS,            KC_RSFT, KC_UP,
+        KC_LSFT,           DE_Y,     KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    DE_COMM, DE_DOT,   DE_MINS,            KC_RSFT, KC_UP,
         KC_LCTL, KC_LWIN,  KC_LALT,                             KC_SPC,                             KC_RALT,  _______,  CODE,     KC_LEFT, KC_DOWN, KC_RGHT),
 
     [FN] = LAYOUT_ansi_67(
