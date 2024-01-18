@@ -38,13 +38,16 @@ enum layers{
 
 // Tap Dance declarations
 enum {
-    TD_LOS, // Lock/OS
+    TD_LOS, // OS/UNLOCK
+    TD_LCK, // OS/LOCK
 };
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
     // Tap once for OS, twice for Ctrl+Alt+Del
     [TD_LOS] = ACTION_TAP_DANCE_DOUBLE(KC_LWIN, LCA(KC_DEL)),
+    // Tap once for OS, twice for WIN+L
+    [TD_LCK] = ACTION_TAP_DANCE_DOUBLE(KC_LWIN, LWIN(KC_L)),
 };
 
 uint8_t mod_state;
@@ -116,7 +119,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 if (record->event.pressed) {
                     if (code_is_held) {
                         clear_mods();
-                        register_code(DE_EURO);
+                        register_code16(DE_EURO);
                         return false;
                     }
                 }
@@ -209,9 +212,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
         case KC_U:
             {
+                static bool udia_registered;
                 if (record->event.pressed) {
                     if (code_is_held) {
                         register_code(DE_UDIA);
+                        udia_registered = true;
+                        return false;
+                    }
+                } else {
+                    if (udia_registered) {
+                        unregister_code(DE_UDIA);
+                        udia_registered = false;
                         return false;
                     }
                 }
@@ -220,9 +231,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
         case KC_A:
             {
+                static bool adia_registered;
                 if (record->event.pressed) {
                     if (code_is_held) {
                         register_code(DE_ADIA);
+                        adia_registered = true;
+                        return false;
+                    }
+                } else {
+                    if (adia_registered) {
+                        unregister_code(DE_ADIA);
+                        adia_registered = false;
                         return false;
                     }
                 }
@@ -231,23 +250,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
         case KC_O:
             {
+                static bool odia_registered;
                 if (record->event.pressed) {
                     if (code_is_held) {
                         register_code(DE_ODIA);
+                        odia_registered = true;
+                        return false;
+                    }
+                } else {
+                    if (odia_registered) {
+                        unregister_code(DE_ODIA);
+                        odia_registered = false;
                         return false;
                     }
                 }
                 return true;
-            }
-
-        case CUST_UACC:
-            {
-                if (record->event.pressed) {
-                    register_code(DE_GRV);
-                    register_code(DE_U);
-                    return false;
-                }
-                return false;
             }
 
     }
@@ -361,7 +378,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         RGB_SPI, XXXXXXX,  XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,          TG(TYPING),
         RGB_SPD, XXXXXXX,  XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,            RGB_SAI,          TG(WIN_BASE),
         _______,           XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,            _______, RGB_HUI,
-        _______, XXXXXXX,  _______,                             XXXXXXX,                            _______,  _______,  XXXXXXX,  RGB_RMOD,RGB_HUD, RGB_MOD)
+        _______, TD(TD_LCK),_______,                            XXXXXXX,                            _______,  _______,  XXXXXXX,  RGB_RMOD,RGB_HUD, RGB_MOD)
 };
 
 #if defined(ENCODER_MAP_ENABLE)

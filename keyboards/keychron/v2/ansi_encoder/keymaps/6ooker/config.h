@@ -5,7 +5,7 @@
 #define RGB_MATRIX_DEFAULT_ON false
 
 #undef TAPPING_TERM
-#define TAPPING_TERM 120
+#define TAPPING_TERM 250
 
 // RGB Matrix Animation modes. Explicitly enabled
 // For full list of effects, see:
