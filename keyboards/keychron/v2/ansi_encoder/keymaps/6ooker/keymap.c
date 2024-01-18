@@ -323,7 +323,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             case 2:
                 rgb_matrix_set_color(i, RGB_BLUE);
                 break;
-            case 4:
+            case 3:
 
                 for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
                     for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
