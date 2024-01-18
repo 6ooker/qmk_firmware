@@ -22,13 +22,17 @@
 
 enum custom_keycodes {
     CODE = SAFE_RANGE,
+    CUST_DIA,
+    CUST_MULT,
+    CUST_DIV,
+    CUST_CURRENCY,
+    CUST_UACC,
 };
 
 enum layers{
     MAC_BASE,
     WIN_BASE,
     TYPING,
-    TMP_LAYER,
     FN
 };
 
@@ -181,6 +185,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return true;
             }
 
+        case CUST_UACC:
+            {
+                if (record->event.pressed) {
+                    SEND_STRING("`u");
+                }
+                return false;
+            }
+
     }
     return true;
 };
@@ -217,6 +229,12 @@ const key_override_t type_ss_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_SS, D
 const key_override_t type_dlr_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_DLR, DE_UDIA, 1<<TYPING);
 const key_override_t type_ss_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_SS, DE_SECT, 1<<TYPING);
 const key_override_t type_scln_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_SCLN, DE_DEG, 1<<TYPING);
+const key_override_t type_slsh_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_SLSH, CUST_DIV, 1<<TYPING);
+const key_override_t type_lprn_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_LPRN, CUST_MULT, 1<<TYPING);
+const key_override_t type_quot_ovrd = ko_make_with_layers(MOD_MASK_SHIFT, DE_QUOT, CUST_CURRENCY, 1<<TYPING);
+const key_override_t type_slsh_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_SLSH, CUST_UACC, 1<<TYPING);
+const key_override_t type_lprn_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_LPRN, DE_RPRN, 1<<TYPING);
+const key_override_t type_quot_alt_ovrd = ko_make_with_layers(MOD_MASK_ALT, DE_QUOT, CUST_DIA, 1<<TYPING);
 
 // This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
@@ -250,6 +268,12 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     &type_dlr_alt_ovrd,
     &type_ss_alt_ovrd,
     &type_scln_ovrd,
+    &type_slsh_ovrd,
+    &type_lprn_ovrd,
+    &type_quot_ovrd,
+    &type_slsh_alt_ovrd,
+    &type_lprn_alt_ovrd,
+    &type_quot_alt_ovrd,
     NULL // Null terminate the array!
 };
 
@@ -270,44 +294,36 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [TYPING] = LAYOUT_ansi_67(
         DE_SCLN, KC_1,     KC_2,     KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     DE_PERC,  KC_EQL,   KC_BSPC,          KC_MUTE,
-        KC_TAB,  KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    KC_Z,    KC_U,    KC_I,    KC_O,    KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS,          KC_DEL,
+        KC_TAB,  KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    KC_Z,    KC_U,    KC_I,    KC_O,    KC_P,     DE_SLSH,  DE_LPRN,  DE_QUOT,          KC_DEL,
         KC_CAPS, KC_A,     KC_S,     KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    DE_DLR,   DE_SS,              KC_ENT,           KC_HOME,
         KC_LSFT,           KC_Y,     KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    DE_COMM, DE_DOT,   DE_MINS,            KC_RSFT, KC_UP,
         KC_LCTL, KC_LWIN,  KC_LALT,                             KC_SPC,                             KC_RALT,  _______,  CODE,     KC_LEFT, KC_DOWN, KC_RGHT),
 
-    [TMP_LAYER] = LAYOUT_ansi_67(
-        KC_GRV,  KC_1,     KC_2,     KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     KC_MINS,  KC_EQL,   KC_BSPC,          KC_MUTE,
-        KC_TAB,  KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    KC_Z,    KC_U,    KC_I,    KC_O,    KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS,          KC_DEL,
-        KC_CAPS, KC_A,     KC_S,     KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,  KC_QUOT,            KC_ENT,           KC_HOME,
-        KC_LSFT,           KC_Y,     KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,   KC_SLSH,            KC_RSFT, KC_UP,
-        KC_LCTL, KC_LWIN,  KC_LALT,                             KC_SPC,                             KC_RALT,  _______,  CODE,     KC_LEFT, KC_DOWN, KC_RGHT),
-
     [FN] = LAYOUT_ansi_67(
-        _______, KC_F1,    KC_F2,    KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,   KC_F11,   KC_F12,   _______,          RGB_TOG,
-        _______, RGB_MOD,  RGB_VAI,  RGB_HUI, RGB_SAI, RGB_SPI, _______, _______, _______, _______, _______,  _______,  _______,  _______,          TG(TYPING),
-        _______, RGB_RMOD, RGB_VAD,  RGB_HUD, RGB_SAD, RGB_SPD, _______, _______, _______, _______, _______,  _______,            _______,          TG(WIN_BASE),
-        _______,           _______,  _______, _______, _______, _______, _______, _______, _______, _______,  _______,            _______, _______,
-        _______, _______,  _______,                             _______,                            _______,  _______,  _______,  _______, _______, _______)
+        KC_ESC,  KC_F1,    KC_F2,    KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,   KC_F11,   KC_F12,   RGB_SAD,          RGB_TOG,
+        RGB_SPI, XXXXXXX,  XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,          TG(TYPING),
+        RGB_SPD, XXXXXXX,  XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,            RGB_SAI,          TG(WIN_BASE),
+        _______,           XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,            _______, RGB_HUI,
+        _______, XXXXXXX,  _______,                             XXXXXXX,                            _______,  _______,  XXXXXXX,  RGB_RMOD,RGB_HUD, RGB_MOD)
 };
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [MAC_BASE] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
     [WIN_BASE] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    [TYPING]   = { ENCODER_CCW_CW(RGB_VAD, RGB_VAI)},
-    [TMP_LAYER]   = { ENCODER_CCW_CW(RGB_VAD, RGB_VAI)},
-    [FN]   = { ENCODER_CCW_CW(_______, _______)}
+    [TYPING]   = { ENCODER_CCW_CW(_______, _______)},
+    [FN]   = { ENCODER_CCW_CW(RGB_VAD, RGB_VAI)}
 };
 #endif // ENCODER_MAP_ENABLE
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    uint8_t layer = get_highest_layer(layer_state|default_layer_state);
     for (uint8_t i = led_min; i < led_max; i++) {
-        switch(get_highest_layer(layer_state|default_layer_state)) {
+        switch(layer) {
             case 2:
                 rgb_matrix_set_color(i, RGB_BLUE);
                 break;
-            case FN:
-                uint8_t layer = get_highest_layer(layer_state);
+            case 4:
 
                 for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
                     for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
