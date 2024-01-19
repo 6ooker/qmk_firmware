@@ -36,22 +36,36 @@ enum layers{
     FN
 };
 
-// Tap Dance declarations
+typedef enum {
+    TD_NONE,
+    TD_UNKNOWN,
+    TD_SINGLE_TAP,
+    TD_SINGLE_HOLD,
+    TD_DOUBLE_TAP,
+    TD_DOUBLE_HOLD,
+    TD_DOUBLE_SINGLE_TAP, // Send two single taps
+    TD_TRIPLE_TAP,
+    TD_TRIPLE_HOLD
+} td_state_t;
+
+typedef struct {
+    bool is_press_action;
+    td_state_t state;
+} td_tap_t;
+
+// Tap Dance enums
 enum {
-    TD_LOS, // OS/UNLOCK
-    TD_LCK, // OS/LOCK
+    TD_LOS, // OS/UNLOCK/LOCK
     TD_TC, // TAB/VSCODE COMMAND PALETTE
 };
 
-// Tap Dance definitions
-tap_dance_action_t tap_dance_actions[] = {
-    // Tap once for OS, twice for Ctrl+Alt+Del
-    [TD_LOS] = ACTION_TAP_DANCE_DOUBLE(KC_LWIN, LCA(KC_DEL)),
-    // Tap once for OS, twice for WIN+L
-    [TD_LCK] = ACTION_TAP_DANCE_DOUBLE(KC_LWIN, LWIN(KC_L)),
-    // Tap once for TAB, twice for Ctrl+Shift+P (vs code command palette)
-    [TD_TC] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, RCS(KC_P)),
-};
+td_state_t cur_dance(tap_dance_state_t *state);
+
+// For the Win tap dance. Put it here so it can be used in any keymap
+void win_finished(tap_dance_state_t *state, void *user_data);
+void win_reset(tap_dance_state_t *state, void *user_data);
+
+
 
 void leader_start_user(void) {
     // Do smthing when the leader key is pressed
@@ -407,7 +421,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         RGB_SPI, XXXXXXX,  XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,          TG(TYPING),
         RGB_SPD, XXXXXXX,  XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,            RGB_SAI,          TG(WIN_BASE),
         _______,           XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,            _______, RGB_HUI,
-        _______, TD(TD_LCK),_______,                            XXXXXXX,                            _______,  _______,  XXXXXXX,  RGB_RMOD,RGB_HUD, RGB_MOD)
+        _______, _______,  _______,                             XXXXXXX,                            _______,  _______,  XXXXXXX,  RGB_RMOD,RGB_HUD, RGB_MOD)
 };
 
 #if defined(ENCODER_MAP_ENABLE)
@@ -426,7 +440,8 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     for (uint8_t i = led_min; i < led_max; i++) {
         switch(layer) {
             case 2:
-                rgb_matrix_set_color(i, 0, 14, 85);
+
+                rgb_matrix_set_color(29, 0, 14, 85);
                 //rgb_matrix_sethsv(200, 255, 200);
                 break;
             case 3:
@@ -448,3 +463,71 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
     return false;
 }
+
+
+td_state_t cur_dance(tap_dance_state_t *state) {
+    if (state->count == 1) {
+        if (state->interrupted || !state->pressed) return TD_SINGLE_TAP;
+        // Key has not been interrupted, but is still held. Means you want to send a 'HOLD'.
+        else return TD_SINGLE_HOLD;
+    } else if (state->count == 2) {
+        // TD_DOUBLE_SINGLE_TAP is to distinguish between typing "pepper", and actually wanting a double tap
+        // action when hitting 'pp'. Suggested use case for this return value is when you want to send two
+        // keystrokes of the key, and not the 'double tap' action/macro.
+        if (state->interrupted) return TD_DOUBLE_SINGLE_TAP;
+        else if (state->pressed) return TD_DOUBLE_HOLD;
+        else return TD_DOUBLE_TAP;
+    }
+
+    // Assumes no one is trying to type the same letter three times (at least not quickly).
+    // If your tap dance key is 'KC_W', and you want to type "www." quickly - then you will need to add
+    // an exception here to return a 'TD_TRIPLE_SINGLE_TAP', and define that enum just like 'TD_DOUBLE_SINGLE_TAP'
+    if (state->count == 3) {
+        if (state->interrupted || !state->pressed) return TD_TRIPLE_TAP;
+        else return TD_TRIPLE_HOLD;
+    } else return TD_UNKNOWN;
+}
+
+// Create an instance of 'td_tap_t' for the 'win' tap dance.
+static td_tap_t wintap_state = {
+    .is_press_action = true,
+    .state = TD_NONE
+};
+
+void win_finished(tap_dance_state_t *state, void *user_data) {
+    wintap_state.state = cur_dance(state);
+    switch (wintap_state.state)
+    {
+    case TD_SINGLE_TAP: register_code(KC_LWIN); break;
+    case TD_SINGLE_HOLD: register_code(KC_LWIN); break;
+    case TD_DOUBLE_TAP: register_code16(LCA(KC_DEL)); break;
+    case TD_DOUBLE_HOLD: register_code16(LWIN(KC_L)); break;
+    // Last case is for fast typing. Assuming your key is `f`:
+    // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
+    // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
+    case TD_DOUBLE_SINGLE_TAP: tap_code(KC_LWIN); register_code(KC_LWIN); break;
+    default: break;
+    }
+}
+
+void win_reset(tap_dance_state_t *state, void *user_data) {
+    switch (wintap_state.state)
+    {
+    case TD_SINGLE_TAP: unregister_code(KC_LWIN); break;
+    case TD_SINGLE_HOLD: unregister_code(KC_LWIN); break;
+    case TD_DOUBLE_TAP: unregister_code16(LCA(KC_DEL)); break;
+    case TD_DOUBLE_HOLD: unregister_code16(LWIN(KC_L)); break;
+    case TD_DOUBLE_SINGLE_TAP: unregister_code(KC_LWIN); break;
+    default: break;
+    }
+    wintap_state.state = TD_NONE;
+}
+
+
+// Tap Dance definitions
+tap_dance_action_t tap_dance_actions[] = {
+    // Tap once for OS, twice for Ctrl+Alt+Del, double-tap and hold for Win+L
+    [TD_LOS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, win_finished, win_reset),
+    // Tap once for TAB, twice for Ctrl+Shift+P (vs code command palette)
+    [TD_TC] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, RCS(KC_P)),
+};
