@@ -1,0 +1,30 @@
+{
+    "manufacturer": "Erik Katzenberger",
+    "keyboard_name": "Padddle \u03A8",
+    "maintainer": "6ooker",
+    "diode_direction": "COL2ROW",
+    "features": {
+        "bootmagic": true,
+        "command": false,
+        "console": false,
+        "extrakey": true,
+        "mousekey": false,
+        "nkro": false,
+        "backlight": false,
+        "rgblight": false,
+        "audio": false
+    },
+    "url": "",
+    "usb": {
+        "device_version": "0.0.3",
+        "pid": "0x6942",
+        "vid": "0xFEED"
+    },
+    "layouts": {
+        "LAYOUT_ortho_1x1": {
+            "layout": [
+                {"matrix": [0, 0], "x": 0, "y": 0}
+            ]
+        }
+    }
+}
